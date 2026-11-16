@@ -4,6 +4,7 @@ import QuizSession from './components/QuizSession';
 import './styles/app.css';
 
 const STORAGE_KEY = 'tables_12_25_best_scores';
+const TIMER_PREF_KEY = 'tables_12_25_timer_enabled';
 
 function App() {
   const [selectedTable, setSelectedTable] = useState(null);
@@ -11,6 +12,19 @@ function App() {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : {};
   });
+
+  const [timerEnabled, setTimerEnabled] = useState(() => {
+    const saved = localStorage.getItem(TIMER_PREF_KEY);
+    return saved !== null ? JSON.parse(saved) : true; // Default ON
+  });
+
+  const toggleTimer = () => {
+    setTimerEnabled((prev) => {
+      const next = !prev;
+      localStorage.setItem(TIMER_PREF_KEY, JSON.stringify(next));
+      return next;
+    });
+  };
 
   const handleSaveBestScore = (tableNum, score) => {
     setBestScores((prev) => {
@@ -24,7 +38,16 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Multiplication Trainer</h1>
+      <header className="top-bar">
+        <h1>Multiplication Trainer</h1>
+        <button
+          type="button"
+          className={`timer-toggle ${timerEnabled ? 'on' : 'off'}`}
+          onClick={toggleTimer}
+        >
+          Timer Mode: {timerEnabled ? 'ON (6s)' : 'OFF'}
+        </button>
+      </header>
 
       {selectedTable === null ? (
         <TableMenu
@@ -34,6 +57,7 @@ function App() {
       ) : (
         <QuizSession
           selectedTable={selectedTable}
+          timerEnabled={timerEnabled}
           onFinishRound={handleSaveBestScore}
           onBack={() => setSelectedTable(null)}
         />

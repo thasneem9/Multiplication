@@ -2,10 +2,10 @@ import { useState } from 'react';
 import QuestionCard from './QuestionCard';
 import { createTableRound } from '../utils/quizEngine';
 
-const QuizSession = ({ selectedTable, onFinishRound, onBack }) => {
+const QuizSession = ({ selectedTable, timerEnabled, onFinishRound, onBack }) => {
   const [questions, setQuestions] = useState(() => createTableRound(selectedTable));
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [results, setResults] = useState([]); // Stores all attempted questions + userAnswer
+  const [results, setResults] = useState([]);
 
   const isFinished = currentIndex >= questions.length;
   const currentQuestion = questions[currentIndex];
@@ -17,7 +17,6 @@ const QuizSession = ({ selectedTable, onFinishRound, onBack }) => {
     const nextIdx = currentIndex + 1;
     setCurrentIndex(nextIdx);
 
-    // Save best score when completing a full 8-question round
     if (nextIdx >= questions.length && questions.length === 8) {
       const score = updatedResults.filter((r) => r.isCorrect).length;
       onFinishRound(selectedTable, score);
@@ -50,7 +49,9 @@ const QuizSession = ({ selectedTable, onFinishRound, onBack }) => {
                 {wrongList.map((item) => (
                   <tr key={item.key}>
                     <td>{item.a} × {item.b}</td>
-                    <td className="wrong-text">{item.userAnswer}</td>
+                    <td className="wrong-text">
+                      {item.userAnswer === null ? 'Time out' : item.userAnswer}
+                    </td>
                     <td className="correct-text">{item.answer}</td>
                   </tr>
                 ))}
@@ -108,7 +109,11 @@ const QuizSession = ({ selectedTable, onFinishRound, onBack }) => {
         </span>
       </div>
 
-      <QuestionCard question={currentQuestion} onNext={handleNext} />
+      <QuestionCard
+        question={currentQuestion}
+        timerEnabled={timerEnabled}
+        onNext={handleNext}
+      />
     </div>
   );
 };
