@@ -6,18 +6,20 @@ const QuizSession = ({ selectedTable, timerEnabled, onFinishRound, onBack }) => 
   const [questions, setQuestions] = useState(() => createTableRound(selectedTable));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [results, setResults] = useState([]);
+  const [isRetryRound, setIsRetryRound] = useState(false);
 
   const isFinished = currentIndex >= questions.length;
   const currentQuestion = questions[currentIndex];
 
-  const handleNext = (resultItem) => {
+ const handleNext = (resultItem) => {
     const updatedResults = [...results, resultItem];
     setResults(updatedResults);
 
     const nextIdx = currentIndex + 1;
     setCurrentIndex(nextIdx);
 
-    if (nextIdx >= questions.length && questions.length === 8) {
+    // Save best score only when completing a full 24-question round (not a retry subset)
+    if (nextIdx >= questions.length && !isRetryRound) {
       const score = updatedResults.filter((r) => r.isCorrect).length;
       onFinishRound(selectedTable, score);
     }

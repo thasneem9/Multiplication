@@ -14,9 +14,9 @@ const TableMenu = ({ bestScores, onSelectTable }) => {
               onClick={() => onSelectTable(num)}
             >
               <span className="table-num">Table {num}</span>
-              <span className="table-score">
-                {best !== undefined ? `Best: ${best}/8` : 'Not played'}
-              </span>
+             <span className="table-score">
+  {best !== undefined ? `Best: ${best}/24` : 'Not played'}
+</span>
             </button>
           );
         })}

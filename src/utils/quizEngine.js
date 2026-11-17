@@ -1,5 +1,9 @@
-export function createTableRound(tableNumber) {
-  const multipliers = [2, 3, 4, 5, 6, 7, 8, 9];
+export function createTableRound(tableNumber, maxMultiplier = 25) {
+  // Generates [2, 3, ..., 25] (24 questions)
+  const multipliers = Array.from(
+    { length: maxMultiplier - 1 },
+    (_, i) => i + 2
+  );
 
   const questions = multipliers.map((m) => ({
     key: `${tableNumber}x${m}`,
