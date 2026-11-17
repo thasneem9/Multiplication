@@ -1,5 +1,7 @@
 # Multiplication Trainer (Tables 12–25) For aptitude and competitive exams
 
+https://thasneem9.github.io/Multiplication/
+
 A fast, keyboard-friendly React web application for practicing mental multiplication across tables **12 through 25** (`×2` to `×9`). Built for rapid recall with an optional 6-second auto-submit timer, mistake review, and persistent best-score tracking.
 
 ---
