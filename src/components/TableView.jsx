@@ -1,4 +1,4 @@
-const MULTIPLIERS = Array.from({ length: 25 }, (_, i) => i + 1); // [1, 2, ..., 25]
+const MULTIPLIERS = Array.from({ length: 20 }, (_, i) => i + 1); // [1, 2, ..., 20]
 
 const TableView = ({ tableNumber, onStartQuiz, onBack }) => {
   return (

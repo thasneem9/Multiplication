@@ -4,7 +4,7 @@ import QuizSession from './components/QuizSession';
 import TableView from './components/TableView';
 import './styles/app.css';
 
-const STORAGE_KEY = 'tables_12_25_v2_scores';
+const STORAGE_KEY = 'tables_12_20_scores';
 const TIMER_PREF_KEY = 'tables_12_25_timer_enabled';
 
 function App() {
