@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import TableMenu from './components/TableMenu';
 import QuizSession from './components/QuizSession';
+import TableView from './components/TableView';
 import './styles/app.css';
 
-const STORAGE_KEY = 'tables_12_25_best_scores';
+const STORAGE_KEY = 'tables_12_25_v2_scores';
 const TIMER_PREF_KEY = 'tables_12_25_timer_enabled';
 
 function App() {
   const [selectedTable, setSelectedTable] = useState(null);
+  const [mode, setMode] = useState('menu'); // 'menu' | 'quiz' | 'view'
+
   const [bestScores, setBestScores] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : {};
@@ -15,7 +18,7 @@ function App() {
 
   const [timerEnabled, setTimerEnabled] = useState(() => {
     const saved = localStorage.getItem(TIMER_PREF_KEY);
-    return saved !== null ? JSON.parse(saved) : true; // Default ON
+    return saved !== null ? JSON.parse(saved) : true;
   });
 
   const toggleTimer = () => {
@@ -36,6 +39,21 @@ function App() {
     });
   };
 
+  const openQuiz = (num) => {
+    setSelectedTable(num);
+    setMode('quiz');
+  };
+
+  const openTableView = (num) => {
+    setSelectedTable(num);
+    setMode('view');
+  };
+
+  const backToMenu = () => {
+    setSelectedTable(null);
+    setMode('menu');
+  };
+
   return (
     <div className="app">
       <header className="top-bar">
@@ -49,17 +67,28 @@ function App() {
         </button>
       </header>
 
-      {selectedTable === null ? (
+      {mode === 'menu' && (
         <TableMenu
           bestScores={bestScores}
-          onSelectTable={(num) => setSelectedTable(num)}
+          onSelectQuiz={openQuiz}
+          onViewTable={openTableView}
         />
-      ) : (
+      )}
+
+      {mode === 'quiz' && selectedTable !== null && (
         <QuizSession
           selectedTable={selectedTable}
           timerEnabled={timerEnabled}
           onFinishRound={handleSaveBestScore}
-          onBack={() => setSelectedTable(null)}
+          onBack={backToMenu}
+        />
+      )}
+
+      {mode === 'view' && selectedTable !== null && (
+        <TableView
+          tableNumber={selectedTable}
+          onStartQuiz={openQuiz}
+          onBack={backToMenu}
         />
       )}
     </div>
